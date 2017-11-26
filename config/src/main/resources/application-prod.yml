@@ -1,0 +1,17 @@
+
+spring:
+  application:
+    name: config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/WZQ1993/config
+          search-paths: /{application}
+server:
+  port: 6001
+eureka:
+  client:
+    service-url:
+      defaultZone: http://104.225.234.158:9002/eureka/
+debug: false

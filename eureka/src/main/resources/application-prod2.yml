@@ -1,0 +1,15 @@
+
+eureka:
+  instance:
+    hostname: 104.225.234.158
+  server:
+    enable-self-preservation: false       # 关闭自我保护模式（缺省为打开）
+    eviction-interval-timer-in-ms: 1000   # 续期时间，即扫描失效服务的间隔时间（缺省为60*1000ms）
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9001/eureka/
+spring:
+  application:
+    name: eureka-server-2
+server:
+  port: 9002
