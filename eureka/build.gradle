@@ -1,0 +1,6 @@
+group 'com.ziqingwang'
+version '1.0'
+
+dependencies {
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka-server'
+}

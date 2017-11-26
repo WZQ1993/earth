@@ -1,0 +1,73 @@
+group 'com.ziqingwang'
+version '1.0'
+buildscript{
+    ext {
+        springCloudVersion = 'Finchley.M2'
+        springBootVersion = '2.0.0.M3'
+        metricsVersion='3.1.2'
+    }
+    repositories{
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        //构建脚本的依赖
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+subprojects{
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    version = '1.0.0'
+    sourceCompatibility = 1.8
+    repositories{
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    ext {
+        springCloudVersion = 'Finchley.M2'
+        springBootVersion = '2.0.0.M3'
+        metricsVersion='3.1.2'
+    }
+    dependencies{
+        //基础
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+        compile "org.springframework.boot:spring-boot-starter-test"
+//        compile "org.springframework.boot:spring-boot-starter-aop"
+        /* 监控相关 */
+        compile "org.springframework.boot:spring-boot-starter-actuator"
+        //web
+        compile "org.springframework.boot:spring-boot-starter-web"
+        compile "org.springframework.boot:spring-boot-starter-jetty"
+        compile ("org.springframework.boot:spring-boot-starter-web"){
+            exclude group: "spring-boot-starter-tomcat"
+        }
+        //门面日志框架，spring-boot默认引用了logback，slf4j将绑定logback
+        compile "org.slf4j:slf4j-api:1.7.24"
+        compile "commons-codec:commons-codec:1.10"
+        compile "com.alibaba:fastjson:1.2.24"
+        compile "com.google.guava:guava:21.0"
+        compile "org.apache.commons:commons-lang3:3.5"
+        //微服务
+        //服务发现
+        compile 'org.springframework.cloud:spring-cloud-starter-eureka'
+    }
+    //排除依赖
+    configurations {
+        //排除其他日志记录框架
+//        all*.exclude group: 'commons-logging', module: 'commons-logging'
+        all*.exclude group: 'log4j', module: 'log4j'
+    }
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+}
