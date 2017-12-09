@@ -3,4 +3,7 @@
 *.rar
 .gradle/
 .idea/
-*/build/
+build
+out
+classes
+work
