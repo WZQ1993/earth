@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: service
+  cloud:
+    config:
+      profile: prod
+      label: master
+      uri: http://104.225.234.158:6001

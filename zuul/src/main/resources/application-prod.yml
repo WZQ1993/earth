@@ -1,0 +1,21 @@
+server:
+  port: 9002
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/
+debug: false
+zuul:
+  routes:
+    # 本地配置
+    local:
+      patch: /local/ack
+      url: /ack
+    # 请求路由
+    token-routes:
+      patch: /token-routes/**
+      url: http://127.0.0.1:8000/
+    # 本地配置
+    token-serviceId:
+      patch: /token-serviceId/**
+      serviceId: token_service

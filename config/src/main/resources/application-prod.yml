@@ -9,9 +9,10 @@ spring:
           uri: https://github.com/WZQ1993/config
           search-paths: /{application}
 server:
-  port: 6001
+  port: 9001
 eureka:
   client:
     service-url:
-      defaultZone: http://104.225.234.158:9002/eureka/
+#      defaultZone: http://104.225.234.158:9002/eureka/
+      defaultZone: http://127.0.0.1:9000/eureka/
 debug: false

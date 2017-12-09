@@ -1,0 +1,52 @@
+server:
+  port: 9003
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/
+debug: false
+zuul:
+  # 针对全局配置不被传递的敏感头信息
+#  sensitive-headers:
+  routes:
+    # 本地配置
+    local:
+      patch: /local/**
+      url: forward:/
+    # 请求路由
+    token-routes:
+      patch: /token-routes/**
+      url: http://127.0.0.1:8000/
+      # 针对路由配置不被传递的敏感头信息
+      senditiveHeaders:
+      sensitive-headers: true
+    # 本地配置
+    token-serviceId:
+      patch: /token-serviceId/**
+      serviceId: token_service
+  add-host-header: false
+  max:
+    host:
+      connections: 500
+  # 对所有请求路由起作用
+  host:
+    socket-timeout-millis: 300
+    connect-timeout-millis: 300
+# ribbon、hystrix只对服务代理的请求路由起作用
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 300
+feign:
+  hystrix:
+    enabled: true
+ribbon:
+  ReadTimeout: 300
+  ConnectTimeout: 300
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 1
