@@ -1,9 +1,0 @@
-group 'com.ziqingwang'
-version '1.0'
-dependencies {
-    //配置中心
-    compile 'org.springframework.cloud:spring-cloud-config-client'
-    compile 'org.springframework.cloud:spring-cloud-starter-zuul'
-    compile 'org.springframework.cloud:spring-cloud-starter-hystrix'
-    compile 'org.springframework.cloud:spring-cloud-starter-ribbon'
-}

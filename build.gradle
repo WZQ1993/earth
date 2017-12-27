@@ -2,8 +2,8 @@ group 'com.ziqingwang'
 version '1.0'
 buildscript{
     ext {
-        springCloudVersion = 'Finchley.M2'
-        springBootVersion = '2.0.0.M3'
+        springCloudVersion = 'Finchley.M4'
+        springBootVersion = '2.0.0.M6'
         metricsVersion='3.1.2'
     }
     repositories{
@@ -32,8 +32,8 @@ subprojects{
         maven { url "https://repo.spring.io/milestone" }
     }
     ext {
-        springCloudVersion = 'Finchley.M2'
-        springBootVersion = '2.0.0.M3'
+        springCloudVersion = 'Finchley.M4'
+        springBootVersion = '2.0.0.M6'
         metricsVersion='3.1.2'
     }
     dependencies{
@@ -57,7 +57,7 @@ subprojects{
         compile "org.apache.commons:commons-lang3:3.5"
         //微服务
         //服务发现
-        compile 'org.springframework.cloud:spring-cloud-starter-eureka'
+        compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     }
     //排除依赖
     configurations {

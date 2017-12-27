@@ -8,6 +8,9 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 @SpringBootApplication
 @EnableConfigServer
 @EnableDiscoveryClient
+/**
+ * @author wzq
+ */
 public class ConfigMain {
     public static void main(String[] args){
         SpringApplication.run(ConfigMain.class,args);
