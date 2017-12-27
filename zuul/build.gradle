@@ -1,0 +1,8 @@
+group 'com.ziqingwang'
+version '1.0'
+dependencies {
+    //配置中心
+    compile 'org.springframework.cloud:spring-cloud-config-client'
+    compile 'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
+    compile 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
+}
