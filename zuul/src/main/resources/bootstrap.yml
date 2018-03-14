@@ -6,4 +6,5 @@ spring:
 #      profile: native
       profile: prod
       label: master
-      uri: http://172.19.1.1:9001
+#      uri: http://172.19.1.1:9001
+      uri: http://127.0.0.1:9001

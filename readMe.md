@@ -28,10 +28,10 @@ docker run --name zk --net wzqnet --ip 172.19.1.3 -p 2181:2181 -p 2888:2888 -p 3
 ```
 #kafka
 > 172.19.1.4:9092
-> 
+>
 > https://hub.docker.com/r/wurstmeister/kafka/
 ```aidl
-docker run --name kafka --net wzqnet --ip 172.19.1.4 -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=kafka01 -e KAFKA_CREATE_TOPICS="test:1:1" -e KAFKA_ZOOKEEPER_CONNECT=172.19.1.3:2181 -d  wurstmeister/kafka
+docker run --name kafka --net wzqnet --ip 172.19.1.4 -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=172.19.1.4 -e KAFKA_CREATE_TOPICS="test:1:1" -e KAFKA_ZOOKEEPER_CONNECT=172.19.1.3:2181 -d  wurstmeister/kafka
 //进入kafka容器
 docker exec -it kafka /bin/bash
 //创建主题
@@ -48,3 +48,5 @@ docker exec -it kafka /bin/bash
 > https://hub.docker.com/r/sheepkiller/kafka-manager/
 ```sbtshell
 docker run -it --restart always -d --name=kafka-manager --net wzqnet --ip 172.19.1.5 -p 8080:9000 -e ZK_HOSTS="172.19.1.3:2181" sheepkiller/kafka-manager
+
+```

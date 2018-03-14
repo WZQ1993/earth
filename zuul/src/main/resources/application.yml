@@ -3,7 +3,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://172.19.1.0:9000/eureka/
+      defaultZone: http://127.0.0.1:9000/eureka/
 debug: false
 zuul:
   # 针对全局配置不被传递的敏感头信息

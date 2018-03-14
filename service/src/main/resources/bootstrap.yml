@@ -5,4 +5,4 @@ spring:
     config:
       profile: prod
       label: master
-      uri: http://104.225.234.158:6001
+      uri: http://127.0.0.1:9001
