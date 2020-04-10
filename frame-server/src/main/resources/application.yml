@@ -1,0 +1,8 @@
+server:
+  port: 8000
+debug: true
+# 业务配置
+app:
+  elasticsearch:
+    host: 127.0.0.1
+    port: 9200

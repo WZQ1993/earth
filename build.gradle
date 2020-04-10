@@ -1,46 +1,43 @@
-group 'com.ziqingwang'
-version '1.0'
-buildscript{
-    ext {
-        springCloudVersion = 'Finchley.M4'
-        springBootVersion = '2.0.0.M6'
-        metricsVersion='3.1.2'
-    }
-    repositories{
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-        maven { url "https://repo.spring.io/snapshot" }
-        maven { url "https://repo.spring.io/milestone" }
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
         mavenCentral()
-        jcenter()
     }
     dependencies {
         //构建脚本的依赖
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}" as Object)
     }
 }
-subprojects{
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
 
-    version = '1.0.0'
+subprojects {
+    /* 使用二进制插件 */
+    apply plugin: 'java' /* java是Gradle的核心插件，是内置的，内置插件不需要配置依赖路径 */
+    apply plugin: 'idea' /* 同上  让Gradle自动生成Intellij的项目文件*/
+    /* 注意gradle插件不再自动应用，所以这里需要指定 */
+    apply plugin: 'org.springframework.boot'
+    /* 依赖管理插件仍然是一个spring-boot-gradle-plugin传递依赖，所以无需在build.gradle配置中明确列出此依赖。 */
+    apply plugin: 'io.spring.dependency-management' /* 依赖管理，用来传递spring的依赖 */
+
+    group 'com.ziqingwang'
+    version '0.0.1'
+
     sourceCompatibility = 1.8
-    repositories{
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-        maven { url "https://repo.spring.io/snapshot" }
-        maven { url "https://repo.spring.io/milestone" }
+    targetCompatibility = 1.8
+    // 指定编码格式
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        mavenCentral()
     }
-    ext {
-        springCloudVersion = 'Finchley.M4'
-        springBootVersion = '2.0.0.M6'
-        metricsVersion='3.1.2'
-    }
-    dependencies{
+    dependencies {
+        testCompile "junit:junit:4.13"
+
         compile "org.springframework.boot:spring-boot-starter-test"
         compile "org.springframework.boot:spring-boot-starter-actuator"
-        compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-        testCompile group: 'junit', name: 'junit', version: '4.12'
+        compile "org.springframework.boot:spring-boot-starter-web"
         compile "org.slf4j:slf4j-api:1.7.24"
         compile "commons-codec:commons-codec:1.10"
         compile "com.alibaba:fastjson:1.2.24"
@@ -50,10 +47,5 @@ subprojects{
     //排除依赖
     configurations {
         all*.exclude group: 'log4j', module: 'log4j'
-    }
-    dependencyManagement {
-        imports {
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-        }
     }
 }
