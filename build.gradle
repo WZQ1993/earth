@@ -38,11 +38,20 @@ subprojects {
         compile "org.springframework.boot:spring-boot-starter-test"
         compile "org.springframework.boot:spring-boot-starter-actuator"
         compile "org.springframework.boot:spring-boot-starter-web"
+        compile "org.springframework.boot:spring-boot-configuration-processor"
         compile "org.slf4j:slf4j-api:1.7.24"
         compile "commons-codec:commons-codec:1.10"
         compile "com.alibaba:fastjson:1.2.24"
         compile "com.google.guava:guava:21.0"
         compile "org.apache.commons:commons-lang3:3.5"
+        implementation 'io.springfox:springfox-swagger2:2.9.2'
+        implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+        implementation 'com.github.xiaoymin:swagger-bootstrap-ui:1.9.6'
+
+        annotationProcessor 'org.projectlombok:lombok:1.18.2'
+        compileOnly 'org.projectlombok:lombok:1.18.2'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
+        testCompileOnly 'org.projectlombok:lombok:1.18.2'
     }
     //排除依赖
     configurations {

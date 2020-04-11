@@ -6,3 +6,14 @@ app:
   elasticsearch:
     host: 127.0.0.1
     port: 9200
+  swagger:
+    host: localhost:8000
+    scanning-package: com.ziqingwang
+    api-info:
+      title:
+      version:
+      description:
+        contact:
+          email:
+          name:
+          url:

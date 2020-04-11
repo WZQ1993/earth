@@ -27,8 +27,7 @@ public class ElasticSearchService {
                     .id("10010")
                     .source(detail);
             IndexResponse indexResponse = restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
-        }catch (Exception e){
-            log.error("[elasticSearch] - index error, msg:{}", e);
+        }catch (Exception e){ log.error("[elasticSearch] - index error, msg:{}", e);
         }
     }
 

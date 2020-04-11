@@ -7,5 +7,4 @@ dependencies {
     implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client'
     implementation 'org.elasticsearch.client:elasticsearch-rest-client'
     implementation 'org.elasticsearch:elasticsearch'
-    implementation 'org.projectlombok:lombok:1.18.12'
 }
