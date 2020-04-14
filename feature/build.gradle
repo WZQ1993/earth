@@ -1,4 +1,4 @@
-archivesBaseName = 'frame-server'
+archivesBaseName = 'feature'
 
 jar.enabled = true
 bootJar.enabled = true

@@ -2,6 +2,6 @@ rootProject.name = 'earth'
 //include 'eureka'
 //include 'config'
 //include 'zuul'
-include 'frame-server'
+include 'feature'
 
 
