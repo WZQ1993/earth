@@ -1,9 +1,9 @@
 package com.ziqingwang.feature.service;
 
-import java.util.concurrent.TimeUnit;
-
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ziqingwang.feature.entity.RecipeIndexDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -14,11 +14,12 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.get.GetResult;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -29,16 +30,24 @@ public class ElasticSearchService {
     @Autowired
     private RecipeDataService recipeDataService;
 
-    public void index(String recipeCode){
+    // todo 1. suggestions 建议
+    // todo 2. hightlighting 高亮
+
+    public Object index(String recipeCode){
+        IndexResponse indexResponse = null;
         try{
             JSONObject detail = recipeDataService.recipeDetail(recipeCode);
+            RecipeIndexDTO recipeIndexDTO = detail.toJavaObject(RecipeIndexDTO.class);
+            String jsonStr = JSON.toJSONString(recipeIndexDTO);
+            recipeIndexDTO.set_all(jsonStr);
             IndexRequest indexRequest = new IndexRequest("recipe")
                     .id(recipeCode)
-                    .source(detail);
-            IndexResponse indexResponse = restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
+                    .source(JSON.parseObject(JSON.toJSONString(recipeIndexDTO)));
+            indexResponse = restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
         }catch (Exception e){ log.error("[elasticSearch] - index error, msg:{}", e);
-
+            log.error("[elasticSearch] - index error, msg:{}", e);
         }
+        return indexResponse;
     }
 
     public void indexAll(){
@@ -50,8 +59,8 @@ public class ElasticSearchService {
                         index(o.getString("recipeCode"));
                         log.warn("索引数据：{}", o.getString("recipeName"));
                     });
-        }catch (Exception e){ log.error("[elasticSearch] - index error, msg:{}", e);
-
+        }catch (Exception e){
+            log.error("[elasticSearch] - index error, msg:{}", e);
         }
     }
 
@@ -70,7 +79,7 @@ public class ElasticSearchService {
     public SearchResponse query(String keyword){
         SearchRequest request = new SearchRequest("recipe");
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        sourceBuilder.query(QueryBuilders.termQuery("_all", keyword));
+        sourceBuilder.query(QueryBuilders.matchQuery("foods", keyword));
         sourceBuilder.from(0);
         sourceBuilder.size(5);
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
