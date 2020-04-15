@@ -31,11 +31,27 @@ public class ElasticSearchHandler {
         return Response.ok(elasticSearchService.query(keyword));
     }
 
+    @GetMapping("scroll_search")
+    public Response scroll_search(String keyword){
+        return Response.ok(elasticSearchService.searchScroll(keyword));
+    }
+
+    @GetMapping("multi_search")
+    public Response multi_search(String keyword){
+        return Response.ok(elasticSearchService.multiSearch(keyword));
+    }
+
+    @GetMapping("template_search")
+    public Response template_search(String keyword){
+        return Response.ok(elasticSearchService.templateSearch(keyword));
+    }
+
     @PostMapping("indexAll")
     public Response indexAll(){
         elasticSearchService.indexAll();
         return Response.ok();
     }
+
 
 
 }
