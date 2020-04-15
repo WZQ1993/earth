@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ziqingwang.feature.entity.RecipeIndexDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -16,6 +17,9 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.suggest.SuggestBuilder;
+import org.elasticsearch.search.suggest.SuggestBuilders;
+import org.elasticsearch.search.suggest.SuggestionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +33,28 @@ public class ElasticSearchService {
     private RestHighLevelClient restHighLevelClient;
     @Autowired
     private RecipeDataService recipeDataService;
-
-    // todo 1. suggestions 建议
     // todo 2. hightlighting 高亮
 
+    // todo 1. suggestions 建议
+    public Object suggestions(String keyword){
+        SearchRequest request = new SearchRequest("recipe");
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        SuggestionBuilder suggestionBuilder = SuggestBuilders.termSuggestion("info.recipeName").text(keyword);
+        SuggestBuilder suggestBuilder = new SuggestBuilder();
+        suggestBuilder.addSuggestion("suggest_recipe_name", suggestionBuilder);
+        sourceBuilder.suggest(suggestBuilder);
+        sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+        SearchResponse resp = null;
+        try{
+            request.source(sourceBuilder);
+            resp = restHighLevelClient.search(request, RequestOptions.DEFAULT);
+            log.warn("[query] data:{}", resp);
+        }catch (Exception e){
+            log.error("[elasticSearch] - index error, msg:{}", e);
+        }
+        return resp;
+    }
+    
     public Object index(String recipeCode){
         IndexResponse indexResponse = null;
         try{
@@ -85,7 +107,8 @@ public class ElasticSearchService {
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
         SearchResponse resp = null;
         try{
-            resp = restHighLevelClient.search(request.source(sourceBuilder), RequestOptions.DEFAULT);
+            request.source(sourceBuilder);
+            resp = restHighLevelClient.search(request, RequestOptions.DEFAULT);
             log.warn("[query] data:{}", resp);
         }catch (Exception e){
             log.error("[elasticSearch] - index error, msg:{}", e);
