@@ -1,25 +1,33 @@
 package com.ziqingwang.feature.service;
 
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ziqingwang.feature.entity.RecipeIndexDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.search.TermQuery;
+import org.apache.commons.io.FileUtils;
 import org.elasticsearch.ElasticsearchException;
+import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
-import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.*;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
-import org.elasticsearch.client.Request;
 import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.script.ScriptType;
@@ -32,12 +40,9 @@ import org.elasticsearch.search.suggest.SuggestBuilder;
 import org.elasticsearch.search.suggest.SuggestBuilders;
 import org.elasticsearch.search.suggest.SuggestionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
@@ -49,6 +54,13 @@ public class ElasticSearchService {
 	private RestHighLevelClient restHighLevelClient;
 	@Autowired
 	private RecipeDataService recipeDataService;
+	@Value("classpath:recipe_detail_index_mapping.json")
+	private Resource recipe_detail_mapping_res;
+	private static final String RECIPE_DETAIL_INDEX_ALIAS = "recipe_detail";
+
+	public Object test(String keyword){
+		return createIndex();
+	}
 	// todo 2. highlighting 高亮
 	// todo 3. provide full-text-search using mapping api(set "copy_to" field)
 	// todo 4. alias a index
@@ -56,6 +68,31 @@ public class ElasticSearchService {
 	// todo 6. using pipeline to preprocess data before index
 	// todo 7. try using script
 	// todo 8. enrich data during index data
+
+	public Object createIndex(){
+		CreateIndexResponse response = null;
+		try {
+			String indexName = "recipe_detail_" + Instant.now().getEpochSecond();
+			CreateIndexRequest request = new CreateIndexRequest(indexName);
+			// index setting
+			request.settings(
+					Settings.builder()
+							.put("index.number_of_shards", 1)
+							.put("index.number_of_replicas", 0)
+			);
+			// index mapping
+			String recipe_detail_mapping_json = FileUtils.readFileToString(recipe_detail_mapping_res.getFile(), "UTF-8");
+			request.mapping(recipe_detail_mapping_json, XContentType.JSON);
+			// index alias
+			request.alias(new Alias(RECIPE_DETAIL_INDEX_ALIAS));
+			//execution
+			response = restHighLevelClient.indices().create(request, RequestOptions.DEFAULT);
+		}catch (Exception e){
+			log.error("[createIndex] error, msg:{}", e);
+		}
+		return response;
+	}
+
 	// todo 1. suggestions 建议
 	public Object suggestions(String keyword) {
 		SearchRequest request = new SearchRequest("recipe");
@@ -64,7 +101,6 @@ public class ElasticSearchService {
 		SuggestBuilder suggestBuilder = new SuggestBuilder();
 		suggestBuilder.addSuggestion("suggest_recipe_name", suggestionBuilder);
 		sourceBuilder.suggest(suggestBuilder);
-		sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
 		SearchResponse resp = null;
 		try {
 			request.source(sourceBuilder);
@@ -83,7 +119,7 @@ public class ElasticSearchService {
 			RecipeIndexDTO recipeIndexDTO = detail.toJavaObject(RecipeIndexDTO.class);
 			String jsonStr = JSON.toJSONString(recipeIndexDTO);
 			recipeIndexDTO.set_all(jsonStr);
-			IndexRequest indexRequest = new IndexRequest("recipe")
+			IndexRequest indexRequest = new IndexRequest(RECIPE_DETAIL_INDEX_ALIAS)
 					.id(recipeCode)
 					.source(JSON.parseObject(JSON.toJSONString(recipeIndexDTO)));
 			indexResponse = restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
@@ -120,7 +156,7 @@ public class ElasticSearchService {
 		return resp;
 	}
 
-	public SearchResponse query(String keyword) {
+	public SearchResponse search(String keyword) {
 		SearchRequest request = new SearchRequest("recipe");
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 		sourceBuilder.query(QueryBuilders.matchQuery("foods", keyword));
@@ -137,7 +173,6 @@ public class ElasticSearchService {
 		}
 		return resp;
 	}
-
 
 	public Object searchScroll(String keyword) {
 		// set scroll search
@@ -204,7 +239,6 @@ public class ElasticSearchService {
         return null;
     }
 
-
     public Object templateSearch(String keyword){
         // 1. register script not yet available in high level client
         // ........
@@ -240,13 +274,11 @@ public class ElasticSearchService {
         }
         catch (Exception exception) {
             if (exception instanceof ElasticsearchException && ((ElasticsearchException)exception).status() == RestStatus.NOT_FOUND) {
-
+				log.error("[deleteIndex] index not exists, msg:{}", exception);
             }else {
-
+				log.error("[deleteIndex] error msg:{}", exception);
             }
         }
         return response;
     }
-
-
 }

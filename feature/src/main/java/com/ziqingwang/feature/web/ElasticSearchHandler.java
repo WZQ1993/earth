@@ -26,9 +26,9 @@ public class ElasticSearchHandler {
         return Response.ok(elasticSearchService.get(recipeCode));
     }
 
-    @GetMapping("query")
-    public Response query(String keyword){
-        return Response.ok(elasticSearchService.query(keyword));
+    @GetMapping("search")
+    public Response search(String keyword){
+        return Response.ok(elasticSearchService.search(keyword));
     }
 
     @GetMapping("scroll_search")
@@ -52,6 +52,8 @@ public class ElasticSearchHandler {
         return Response.ok();
     }
 
-
-
+    @PostMapping("test")
+    public Response test(String keyword){
+        return Response.ok(elasticSearchService.test(keyword));
+    }
 }

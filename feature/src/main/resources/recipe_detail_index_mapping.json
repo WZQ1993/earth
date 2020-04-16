@@ -1,0 +1,12 @@
+{
+  "properties":{
+    "info":{
+      "type":"nested",
+      "properties":{
+        "recipeName":{
+          "type":"completion"
+        }
+      }
+    }
+  }
+}
