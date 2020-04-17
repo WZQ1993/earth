@@ -1,10 +1,29 @@
 {
   "properties":{
     "info":{
-      "type":"nested",
+      "type":"object",
       "properties":{
         "recipeName":{
-          "type":"completion"
+          "type":"text",
+          "analyzer": "ik_analyzer"
+        },
+        "recipeName_suggest": {
+          "type": "completion"
+        },
+        "description":{
+          "type":"text",
+          "analyzer": "ik_analyzer"
+        }
+      }
+    },
+    "foods": {
+      "properties":{
+        "foodName":{
+          "type":"text",
+          "analyzer": "ik_analyzer"
+        },
+        "foodName_suggest": {
+          "type": "completion"
         }
       }
     }

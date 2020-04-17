@@ -6,6 +6,8 @@ app:
   elasticsearch:
     host: 127.0.0.1
     port: 9200
+  search:
+    recipe-detail-index-alias: recipe_detail
   swagger:
     host: localhost:8000
     scanning-package: com.ziqingwang

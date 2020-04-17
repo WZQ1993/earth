@@ -14,7 +14,6 @@ public class RecipeIndexDTO {
      */
     @Builder.Default
     private String type = "recipeDetail";
-    private String _all;
     private Integer recipeCode;
     private RecipeInfoVO info;
     private RecipeTagVO tag;
@@ -31,6 +30,7 @@ public class RecipeIndexDTO {
     @AllArgsConstructor
     public static class RecipeInfoVO {
         private String recipeName;
+        private String recipeName_suggest;
         private String recipeCate;
         private Integer recipeType;
         private String description;
@@ -90,6 +90,7 @@ public class RecipeIndexDTO {
     @AllArgsConstructor
     public static class RecipeFoodVO {
         private String foodName;
+        private String foodName_suggest;
         private Integer foodType;
         private String foodCode;
     }

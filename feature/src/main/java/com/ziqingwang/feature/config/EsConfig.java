@@ -18,7 +18,7 @@ public class EsConfig{
     @Value("${app.elasticsearch.port}")
     private int port;
 
-    @Bean
+    @Bean("esClient")
     public RestHighLevelClient client() {
         return new RestHighLevelClient(RestClient.builder(new HttpHost(elasticsearchHost,port)));
     }
