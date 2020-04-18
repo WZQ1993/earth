@@ -1,5 +1,7 @@
 package com.ziqingwang.feature.entity;
 
+import java.util.Comparator;
+
 import lombok.*;
 
 /**
@@ -12,16 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class SearchSuggestDTO implements Comparable{
+public class SearchSuggestVO {
 	private String suggestText;
 	private int score;
-
-	@Override
-	public int compareTo(Object o) {
-		if(o instanceof SearchSuggestDTO){
-			return score - ((SearchSuggestDTO)o).getScore();
-		}else {
-			return 1;
-		}
-	}
 }

@@ -38,6 +38,7 @@ public class SearchIndexService {
 		try {
 			JSONObject data = recipeDataService.recipeDetail(recipeCode);
 			if (Objects.isNull(data)) {
+				log.warn("[elasticSearch] - index data, data is null:{}", recipeCode);
 				return;
 			}
 			// process detail

@@ -1,29 +1,140 @@
 {
   "properties":{
+    "text": {
+      "type": "text",
+      "fields": {
+        "pinyin": {
+          "type": "text",
+          "analyzer": "default_pinyin_letter_analyzer"
+        }
+      },
+      "fielddata": false,
+      "store": true
+    },
+    "tag": {
+      "properties":{
+        "cuisineNames": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "cookwayNames": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "tasteNames": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "dishesNames": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "seasonNames": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "foodNames": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "difficultyNames": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "functionNames": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "suitCrowdNames": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "tabooCrowdNames": {
+          "type": "text",
+          "copy_to": "text"
+        }
+      }
+    },
     "info":{
       "type":"object",
       "properties":{
-        "recipeName":{
-          "type":"text",
-          "analyzer": "ik_analyzer"
+        "recipeName": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "recipeCate": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "recipeType": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "description": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "tips": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "difficulty": {
+          "type": "text",
+          "copy_to": "text"
+        },
+        "prepareTips": {
+          "type": "text",
+          "copy_to": "text"
         },
         "recipeName_suggest": {
-          "type": "completion"
-        },
-        "description":{
-          "type":"text",
-          "analyzer": "ik_analyzer"
+          "type": "completion",
+          "fields": {
+            "pinyin": {
+              "type": "completion",
+              "analyzer": "default_pinyin_letter_analyzer"
+            },
+            "full_pinyin": {
+              "type": "completion",
+              "analyzer": "full_pinyin_letter_analyzer"
+            },
+            "first_pinyin": {
+              "type": "completion",
+              "analyzer": "first_pinyin_letter_analyzer"
+            }
+          }
         }
       }
     },
     "foods": {
       "properties":{
-        "foodName":{
-          "type":"text",
-          "analyzer": "ik_analyzer"
+        "foodName": {
+          "type": "text",
+          "copy_to": "text"
         },
         "foodName_suggest": {
-          "type": "completion"
+          "type": "completion",
+          "fields": {
+            "pinyin": {
+              "type": "completion",
+              "analyzer": "default_pinyin_letter_analyzer"
+            },
+            "full_pinyin": {
+              "type": "completion",
+              "analyzer": "full_pinyin_letter_analyzer"
+            },
+            "first_pinyin": {
+              "type": "completion",
+              "analyzer": "first_pinyin_letter_analyzer"
+            }
+          }
+        }
+      }
+    },
+    "keySteps": {
+      "properties":{
+        "foodName": {
+          "type": "text",
+          "copy_to": "text"
         }
       }
     }

@@ -29,6 +29,7 @@ public class RecipeIndexDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RecipeInfoVO {
+        private String recipeCode;
         private String recipeName;
         private String recipeName_suggest;
         private String recipeCate;
