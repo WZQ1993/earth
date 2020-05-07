@@ -12,9 +12,6 @@ import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
 
 /**
- * 1. 分布式锁 - 结合LUA脚本
- * 6. scan
- *
  * @author: Ziven
  * @date: 2020/04/20
  **/
