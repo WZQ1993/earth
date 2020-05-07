@@ -39,6 +39,7 @@ subprojects {
         implementation "org.springframework.boot:spring-boot-starter-actuator"
         implementation "org.springframework.boot:spring-boot-starter-web"
         implementation "org.springframework.boot:spring-boot-configuration-processor"
+        implementation "org.springframework.boot:spring-boot-starter-data-redis"
         implementation "org.slf4j:slf4j-api:1.7.24"
         implementation "commons-codec:commons-codec:1.10"
         implementation "com.alibaba:fastjson:1.2.24"

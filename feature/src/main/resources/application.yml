@@ -19,3 +19,8 @@ app:
           email:
           name:
           url:
+spring:
+  redis:
+    host: 118.178.232.166
+    port: 16379
+    password:
